@@ -8,9 +8,9 @@
 可以直接打开，但是仓位数据需要手动填入，可以作为其他web程序的一部分
 2：node-red的方式
 由node-red作为服务器构建的一个网页界面
-需要在node-red根目录设置静态文件index，将image文件(存放图标)和js文件放入
-在node-red种导入示例，网址是前端html，根目录为js，动态数据为数据源
-
+需要在node-red根目录设置静态文件index夹，将index文件夹放入node-red根目录，
+在node-red种导入展示网页.json，打开网址
+http://127.0.0.1:1880/nodeui/e1
 
 界面展示
 ![image](https://github.com/user-attachments/assets/87ad45b8-1def-4904-93ff-3671fe6e6117)
