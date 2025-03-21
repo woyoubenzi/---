@@ -1,0 +1,432 @@
+[
+    {
+        "id": "afdaa1d48efa9822",
+        "type": "tab",
+        "label": "展示网页",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ec702277cf051e74",
+        "type": "http in",
+        "z": "afdaa1d48efa9822",
+        "name": "x1",
+        "url": "/nodeui/1",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 310,
+        "y": 180,
+        "wires": [
+            [
+                "cc2a3ed1130d7bad"
+            ]
+        ]
+    },
+    {
+        "id": "77eb196cc6068259",
+        "type": "http response",
+        "z": "afdaa1d48efa9822",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 650,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "cc2a3ed1130d7bad",
+        "type": "function",
+        "z": "afdaa1d48efa9822",
+        "name": "小库1层",
+        "func": "msg.payload = `\n<!DOCTYPE html>\n<html lang=\"zh\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>仓库可视化</title>\n    <script src=\"/echarts.min.js\"></script>\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            text-align: center;\n            background-color: #f5f5f5;\n        }\n        #title {\n            font-size: 24px;\n            font-weight: bold;\n            margin-top: 10px;\n        }\n        #controls {\n            margin: 10px 0;\n        }\n        button {\n            padding: 8px 15px;\n            font-size: 16px;\n            cursor: pointer;\n            border: none;\n            border-radius: 5px;\n            background: #007BFF;\n            color: white;\n            margin: 5px;\n        }\n        button:hover {\n            background: #0056b3;\n        }\n        #warehouseChart {\n            width: 90%;\n            height: 90vw; /* 调整高度为宽度的90% */\n            max-height: 850px; /* 最大高度 */\n            margin: auto;\n            background: white;\n            border-radius: 10px;\n            padding: 10px;\n        }\n    </style>\n</head>\n<body>\n    <div id=\"title\">一层</div>\n    <div id=\"controls\">\n        <button onclick=\"window.location.href='http://127.0.0.1:1880/nodeui/1';\">一层</button>\n        <button onclick=\"window.location.href='http://127.0.0.1:1880/nodeui/2';\">二层</button>\n        <button onclick=\"window.location.href='http://127.0.0.1:1880/nodeui/3';\">三层</button>\n        <button id=\"refreshBtn\">刷新数据</button>\n    </div>\n    <div id=\"warehouseChart\"></div>\n    <script src=\"/index.x1.js\"></script>\n</body>\n</html>\n`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 180,
+        "wires": [
+            [
+                "77eb196cc6068259"
+            ]
+        ]
+    },
+    {
+        "id": "af083fd19cc28fc9",
+        "type": "comment",
+        "z": "afdaa1d48efa9822",
+        "name": "网址",
+        "info": "http://127.0.0.1:1880/nodeui/x1",
+        "x": 410,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "1742942bfc911644",
+        "type": "comment",
+        "z": "afdaa1d48efa9822",
+        "name": "动态数据",
+        "info": "http://127.0.0.1:1880/template",
+        "x": 420,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "function1",
+        "type": "function",
+        "z": "afdaa1d48efa9822",
+        "name": "一层仓库数据",
+        "func": "msg.payload = {\n    vehicles: [\n        { id: 1, row: 3, col: 2, battery: 85, task: '无', start: '无', end: '1-1-11' },\n        { id: 2, row: 6, col: 5, battery: 50, task: '零食 220005', start: 'C2', end: '1-1-10' }\n    ],\n    slots: [\n        { slotNumber: \"1-1-1\", status: \"occupied\", productName: \"产品A\", palletNumber: \"P001\" },\n        { slotNumber: \"1-1-2\", status: \"empty\", productName: \"产品A\", palletNumber: \"P001\" },\n        { slotNumber: \"1-2-1\", status: \"occupied\", productName: \"产品A\", palletNumber: \"P001\" },\n        { slotNumber: \"1-2-2\", status: \"unavailable\" }\n    ]\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 540,
+        "wires": [
+            [
+                "http response1"
+            ]
+        ]
+    },
+    {
+        "id": "http response1",
+        "type": "http response",
+        "z": "afdaa1d48efa9822",
+        "name": "返回数据",
+        "statusCode": "",
+        "headers": {},
+        "x": 680,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "http in1",
+        "type": "http in",
+        "z": "afdaa1d48efa9822",
+        "name": "获取仓库数据",
+        "url": "/api/warehouse/x1",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 290,
+        "y": 540,
+        "wires": [
+            [
+                "function1"
+            ]
+        ]
+    },
+    {
+        "id": "a242be3dc4deaa0a",
+        "type": "http in",
+        "z": "afdaa1d48efa9822",
+        "name": "x2",
+        "url": "/nodeui/2",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 310,
+        "y": 240,
+        "wires": [
+            [
+                "fe57419c45178939"
+            ]
+        ]
+    },
+    {
+        "id": "ccea814c5ac47bbc",
+        "type": "http response",
+        "z": "afdaa1d48efa9822",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 650,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "fe57419c45178939",
+        "type": "function",
+        "z": "afdaa1d48efa9822",
+        "name": "小库2层",
+        "func": "msg.payload = `\n<!DOCTYPE html>\n<html lang=\"zh\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>仓库可视化</title>\n    <script src=\"/echarts.min.js\"></script>\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            text-align: center;\n            background-color: #f5f5f5;\n        }\n        #title {\n            font-size: 24px;\n            font-weight: bold;\n            margin-top: 10px;\n        }\n        #controls {\n            margin: 10px 0;\n        }\n        button {\n            padding: 8px 15px;\n            font-size: 16px;\n            cursor: pointer;\n            border: none;\n            border-radius: 5px;\n            background: #007BFF;\n            color: white;\n            margin: 5px;\n        }\n        button:hover {\n            background: #0056b3;\n        }\n        #warehouseChart {\n            width: 90%;\n            height: 90vw; /* 调整高度为宽度的90% */\n            max-height: 850px; /* 最大高度 */\n            margin: auto;\n            background: white;\n            border-radius: 10px;\n            padding: 10px;\n        }\n    </style>\n</head>\n<body>\n    <div id=\"title\">二层</div>\n    <div id=\"controls\">\n        <button onclick=\"window.location.href='http://127.0.0.1:1880/nodeui/1';\">一层</button>\n        <button onclick=\"window.location.href='http://127.0.0.1:1880/nodeui/2';\">二层</button>\n        <button onclick=\"window.location.href='http://127.0.0.1:1880/nodeui/3';\">三层</button>\n        <button id=\"refreshBtn\">刷新数据</button>\n    </div>\n    <div id=\"warehouseChart\"></div>\n    <script src=\"/index.x2.js\"></script>\n</body>\n</html>\n`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 240,
+        "wires": [
+            [
+                "ccea814c5ac47bbc"
+            ]
+        ]
+    },
+    {
+        "id": "4a5671c4a60f3d1d",
+        "type": "function",
+        "z": "afdaa1d48efa9822",
+        "name": "二层仓库数据",
+        "func": "msg.payload = {\n    vehicles: [\n        { id: 1, row: 4, col: 4, battery: 85, task: '无', start: '无', end: '1-1-11' },\n        { id: 2, row: 6, col: 6, battery: 50, task: '零食 220005', start: 'C2', end: '1-2-10' }\n    ],\n    slots: [\n        { slotNumber: \"1-2-1\", status: \"occupied\", productName: \"产品A\", palletNumber: \"P001\" },\n        { slotNumber: \"1-2-2\", status: \"occupied\", productName: \"产品A\", palletNumber: \"P001\" },\n        { slotNumber: \"1-4-1\", status: \"occupied\", productName: \"产品A\", palletNumber: \"P001\" },\n        { slotNumber: \"1-5-2\", status: \"unavailable\" }\n    ]\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 620,
+        "wires": [
+            [
+                "aa9058387686b072"
+            ]
+        ]
+    },
+    {
+        "id": "aa9058387686b072",
+        "type": "http response",
+        "z": "afdaa1d48efa9822",
+        "name": "返回数据",
+        "statusCode": "",
+        "headers": {},
+        "x": 680,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "de4aa8409345859e",
+        "type": "http in",
+        "z": "afdaa1d48efa9822",
+        "name": "获取仓库数据",
+        "url": "/api/warehouse/x2",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 290,
+        "y": 620,
+        "wires": [
+            [
+                "4a5671c4a60f3d1d"
+            ]
+        ]
+    },
+    {
+        "id": "228f3888803eb8f7",
+        "type": "http in",
+        "z": "afdaa1d48efa9822",
+        "name": "x3",
+        "url": "/nodeui/3",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 310,
+        "y": 300,
+        "wires": [
+            [
+                "91e16f9ce6b6910a"
+            ]
+        ]
+    },
+    {
+        "id": "463a128ce4b7dcef",
+        "type": "http response",
+        "z": "afdaa1d48efa9822",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 650,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "91e16f9ce6b6910a",
+        "type": "function",
+        "z": "afdaa1d48efa9822",
+        "name": "小库3层",
+        "func": "msg.payload = `\n<!DOCTYPE html>\n<html lang=\"zh\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>仓库可视化</title>\n    <script src=\"/echarts.min.js\"></script>\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            text-align: center;\n            background-color: #f5f5f5;\n        }\n        #title {\n            font-size: 24px;\n            font-weight: bold;\n            margin-top: 10px;\n        }\n        #controls {\n            margin: 10px 0;\n        }\n        button {\n            padding: 8px 15px;\n            font-size: 16px;\n            cursor: pointer;\n            border: none;\n            border-radius: 5px;\n            background: #007BFF;\n            color: white;\n            margin: 5px;\n        }\n        button:hover {\n            background: #0056b3;\n        }\n        #warehouseChart {\n            width: 90%;\n            height: 90vw; /* 调整高度为宽度的90% */\n            max-height: 850px; /* 最大高度 */\n            margin: auto;\n            background: white;\n            border-radius: 10px;\n            padding: 10px;\n        }\n    </style>\n</head>\n<body>\n    <div id=\"title\">三层</div>\n    <div id=\"controls\">\n        <button onclick=\"window.location.href='http://127.0.0.1:1880/nodeui/1';\">一层</button>\n        <button onclick=\"window.location.href='http://127.0.0.1:1880/nodeui/2';\">二层</button>\n        <button onclick=\"window.location.href='http://127.0.0.1:1880/nodeui/3';\">三层</button>\n        <button id=\"refreshBtn\">刷新数据</button>\n    </div>\n    <div id=\"warehouseChart\"></div>\n    <script src=\"/index.x2.js\"></script>\n</body>\n</html>\n`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 300,
+        "wires": [
+            [
+                "463a128ce4b7dcef"
+            ]
+        ]
+    },
+    {
+        "id": "542f2c8abc819a49",
+        "type": "function",
+        "z": "afdaa1d48efa9822",
+        "name": "三层仓库数据",
+        "func": "msg.payload = {\n    vehicles: [\n        { id: 1, row: 4, col: 4, battery: 85, task: '无', start: '无', end: '1-1-11' },\n        { id: 2, row: 6, col: 6, battery: 50, task: '零食 220005', start: 'C2', end: '1-2-10' }\n    ],\n    slots: [\n        { slotNumber: \"1-2-1\", status: \"occupied\", productName: \"产品A\", palletNumber: \"P001\" },\n        { slotNumber: \"1-2-2\", status: \"occupied\", productName: \"产品A\", palletNumber: \"P001\" },\n        { slotNumber: \"1-4-1\", status: \"occupied\", productName: \"产品A\", palletNumber: \"P001\" },\n        { slotNumber: \"1-5-2\", status: \"unavailable\" }\n    ]\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 700,
+        "wires": [
+            [
+                "7119a745a5db291f"
+            ]
+        ]
+    },
+    {
+        "id": "7119a745a5db291f",
+        "type": "http response",
+        "z": "afdaa1d48efa9822",
+        "name": "返回数据",
+        "statusCode": "",
+        "headers": {},
+        "x": 680,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "4fcdc034ed3742df",
+        "type": "http in",
+        "z": "afdaa1d48efa9822",
+        "name": "获取仓库数据",
+        "url": "/api/warehouse/x2",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 290,
+        "y": 700,
+        "wires": [
+            [
+                "542f2c8abc819a49"
+            ]
+        ]
+    },
+    {
+        "id": "c2bed9061423b7ea",
+        "type": "http in",
+        "z": "afdaa1d48efa9822",
+        "name": "e1",
+        "url": "/nodeui/e1",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 310,
+        "y": 360,
+        "wires": [
+            [
+                "9cadbe878535f3bb"
+            ]
+        ]
+    },
+    {
+        "id": "fc4169858ba07647",
+        "type": "http response",
+        "z": "afdaa1d48efa9822",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 650,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "9cadbe878535f3bb",
+        "type": "function",
+        "z": "afdaa1d48efa9822",
+        "name": "小库1层",
+        "func": "msg.payload = `<!DOCTYPE html>\n<html lang=\"zh\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>仓库可视化</title>\n    <script src=\"https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js\"></script>\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            text-align: center;\n            background-color: #f5f5f5;\n        }\n        #title {\n            font-size: 24px;\n            font-weight: bold;\n            margin-top: 10px;\n        }\n        #controls {\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            margin: 10px 0;\n        }\n        button {\n            padding: 8px 15px;\n            font-size: 16px;\n            cursor: pointer;\n            border: none;\n            border-radius: 5px;\n            background: #007BFF;\n            color: white;\n            margin: 5px;\n        }\n        button:hover {\n            background: #357dc646;\n        }\n        #warehouseChart {\n            width: 90%;\n            height: 90vw; /* 调整高度为宽度的90% */\n            max-height: 850px; /* 最大高度 */\n            margin: auto;\n            background: white;\n            border-radius: 10px;\n            padding: 10px;\n        }\n        .icon-button {\n            position: relative;\n            padding: 8px;\n            cursor: pointer;\n            border: none;\n            background: none;\n            margin: 5px;\n        }\n        .icon-button img {\n            width: 24px;\n            height: 24px;\n        }\n        .icon-button .tooltip {\n            visibility: hidden;\n            width: 80px;\n            background-color: #555;\n            color: #fff;\n            text-align: center;\n            border-radius: 5px;\n            padding: 5px;\n            position: absolute;\n            z-index: 1;\n            bottom: 125%;\n            left: 50%;\n            margin-left: -40px;\n            opacity: 0;\n            transition: opacity 0.3s;\n        }\n        .icon-button .tooltip::after {\n            content: \"\";\n            position: absolute;\n            top: 100%;\n            left: 50%;\n            margin-left: -5px;\n            border-width: 5px;\n            border-style: solid;\n            border-color: #555 transparent transparent transparent;\n        }\n        .icon-button:hover .tooltip {\n            visibility: visible;\n            opacity: 1;\n        }\n        .dropdown {\n            position: relative;\n            display: inline-block;\n        }\n        .dropdown-content {\n            display: none;\n            position: absolute;\n            background-color: #f9f9f9;\n            min-width: 100px;\n            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);\n            z-index: 1;\n        }\n        .dropdown-content button {\n            color: black;\n            padding: 8px 15px;\n            text-decoration: none;\n            display: block;\n            text-align: left;\n            background: #007BFF;\n            color: white;\n            border: none;\n            width: 90%;\n        }\n        .dropdown-content button:hover {\n            background-color: #357dc646;\n        }\n        .dropdown:hover .dropdown-content {\n            display: block;\n        }\n        .modal {\n            display: none;\n            position: fixed;\n            z-index: 1;\n            left: 0;\n            top: 0;\n            width: 100%;\n            height: 100%;\n            overflow: auto;\n            background-color: rgb(0,0,0);\n            background-color: rgba(0,0,0,0.4);\n            padding-top: 60px;\n        }\n        .modal-content {\n            background-color: #fefefe;\n            margin: 5% auto;\n            padding: 20px;\n            border: 1px solid #888;\n            width: 80%;\n            max-width: 600px;\n            border-radius: 10px;\n        }\n        .close {\n            color: #aaa;\n            float: right;\n            font-size: 28px;\n            font-weight: bold;\n        }\n        .close:hover,\n        .close:focus {\n            color: black;\n            text-decoration: none;\n            cursor: pointer;\n        }\n        .modal-header {\n            text-align: center;\n            font-size: 24px;\n            font-weight: bold;\n        }\n        .modal-body {\n            margin-top: 20px;\n        }\n        .modal-body .icon-description {\n            display: flex;\n            align-items: center;\n            margin-bottom: 10px;\n        }\n        .modal-body .icon-description img {\n            width: 24px;\n            height: 24px;\n            margin-right: 10px;\n        }\n        .green-dot {\n            width: 24px;\n            height: 24px;\n            background-color: #00FF00;\n            border-radius: 50%;\n            display: inline-block;\n            margin-right: 10px;\n        }\n        .yellow-dot {\n            width: 24px;\n            height: 24px;\n            background-color: #FFA500;\n            border-radius: 50%;\n            display: inline-block;\n            margin-right: 10px;\n        }\n        .red-dot {\n            width: 24px;\n            height: 24px;\n            background-color: #FF0000;\n            border-radius: 50%;\n            display: inline-block;\n            margin-right: 10px;\n        }\n        .black-dot {\n            width: 24px;\n            height: 24px;\n            background-color: #000000;\n            border-radius: 50%;\n            display: inline-block;\n            margin-right: 10px;\n        }\n        .white-dot {\n            width: 24px;\n            height: 24px;\n            background-color: #FFF;\n            border-radius: 50%;\n            display: inline-block;\n            margin-right: 10px;\n        }\n        .green-dotnumber {\n            width: 24px;\n            height: 24px;\n            background-color: #00FF00;\n            border-radius: 50%;\n            display: inline-block;\n            margin-right: 10px;\n            position: relative;\n            color: white;\n            font-weight: bold;\n            text-align: center;\n            line-height: 24px;\n        }\n        .modal-body p {\n            margin-bottom: 20px;\n            text-indent: 2em;\n            line-height: 1.6;\n        }\n    </style>\n</head>\n<body>\n\n    <div id=\"title\">一层</div>\n    <div id=\"controls\">\n        <div class=\"dropdown\">\n            <button class=\"icon-button\">\n                <img src=\"/image/lou.png\" alt=\"楼层选择\">\n                <span class=\"tooltip\">选择库层</span>\n            </button>\n            <div class=\"dropdown-content\">\n                <button>一层</button>\n                <button>二层</button>\n                <button>三层</button>\n            </div>\n        </div>\n        <button id=\"refreshBtn\" class=\"icon-button\">\n            <img src=\"/image/shuaxin.png\" alt=\"刷新数据\">\n            <span class=\"tooltip\">刷新数据</span>\n        </button>\n        <button id=\"toggleDisplay\" class=\"icon-button\">\n            <img src=\"/image/qiehuan.png\" alt=\"切换显示\">\n            <span class=\"tooltip\">切换显示</span>\n        </button>\n        <button class=\"icon-button\" id=\"infoBtn\">\n            <img src=\"/image/q.png\" alt=\"说明\">\n            <span class=\"tooltip\">说明</span>\n        </button>\n    </div>\n    <div id=\"warehouseChart\"></div>\n    <div id=\"infoModal\" class=\"modal\">\n        <div class=\"modal-content\">\n            <span class=\"close\">&times;</span>\n            <div class=\"modal-header\">说明</div>\n            <div class=\"modal-body\">\n                <p>\n                    界面会自动刷新，鼠标移动到库位/小车时会显示详细数据。\n                </p>\n                <div class=\"icon-description\">\n                    <img src=\"/image/lou.png\">\n                    <span>选择库层：选择不同的库层进行查看。</span>\n                </div>\n                <div class=\"icon-description\">\n                    <img src=\"/image/shuaxin.png\">\n                    <span>刷新数据：刷新当前显示的数据。</span>\n                </div>\n                <div class=\"icon-description\">\n                    <img src=\"/image/qiehuan.png\">\n                    <span>切换显示：显示库位编号或类型。</span>\n                </div>\n                <div class=\"icon-description\">\n                    <img src=\"/image/vacant.png\">\n                    <span>空货位：该货架没有存放货物。</span>\n                </div>\n                <div class=\"icon-description\">\n                    <img src=\"/image/locked.png\">\n                    <span>锁定货位：该货架不能使用。</span>\n                </div>\n                <div class=\"icon-description\">\n                    <img src=\"/image/occupancy.png\">\n                    <span>有货位：该货架存放有货物。</span>\n                </div>\n                <div class=\"icon-description\">\n                    <img src=\"/image/passage.png\">\n                    <span>小车通道：小车专用通道。</span>\n                </div>\n                <div class=\"icon-description\">\n                    <img src=\"/image/charger.png\">\n                    <span>充电桩：小车充电位。</span>\n                </div>\n                <div class=\"icon-description\">\n                    <img src=\"/image/loading.png\">\n                    <span>装卸位：小车接送货物位。</span>\n                </div>\n                <div class=\"icon-description\">\n                    <span class=\"white-dot\"></span>\n                    <span>大面积空白区域：小车和货位都不能通行的区域。</span>\n                </div>\n                <div class=\"icon-description\">\n                    <span class=\"green-dot\"></span>\n                    <span>小车：电量充裕的小车。</span>\n                </div>\n                <div class=\"icon-description\">\n                    <span class=\"yellow-dot\"></span>\n                    <span>小车：需要充电的小车。</span>\n                </div>\n                <div class=\"icon-description\">\n                    <span class=\"red-dot\"></span>\n                    <span>小车：电量不足的小车。</span>\n                </div>\n                <div class=\"icon-description\">\n                    <span class=\"black-dot\"></span>\n                    <span>小车：出现故障的小车。</span>\n                </div>\n                <div class=\"icon-description\">\n                    <span class=\"green-dotnumber\">1</span>\n                    <span>小车编号：由数字表示。黑色字体代表有任务，白色字体代表无任务。</span>\n                </div>\n                <div class=\"icon-description\">\n                    <span>🚩</span>\n                    <span>小车终点：小车的目的地，数字代表是哪辆小车的任务。</span>\n\n                </div>\n            </div>\n        </div>\n    </div>\n    <script src=\"/index.e1.js\"></script>\n    <script>\n        document.getElementById('infoBtn').onclick = function() {\n            document.getElementById('infoModal').style.display = \"block\";\n        }\n        document.getElementsByClassName('close')[0].onclick = function() {\n            document.getElementById('infoModal').style.display = \"none\";\n        }\n        window.onclick = function(event) {\n            if (event.target == document.getElementById('infoModal')) {\n                document.getElementById('infoModal').style.display = \"none\";\n            }\n        }\n    </script>\n</body>\n</html>`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 360,
+        "wires": [
+            [
+                "fc4169858ba07647"
+            ]
+        ]
+    },
+    {
+        "id": "996313220fe72f43",
+        "type": "function",
+        "z": "afdaa1d48efa9822",
+        "name": "E一层仓库数据",
+        "func": "msg.payload = {\n    vehicles: [\n        { id: 1, row: 3, col: 2, type: 1, battery: 85, task: '无', start: '无', end: '1-1-11' },\n        { id: 2, row: 6, col: 5, type: 0, battery: 50, task: '零食 220005', start: 'C2', end: '1-1-10' },\n    ],\n    slots: [\n        { slotNumber: \"1-1-1\", status: \"occupied\", productName: \"产品A\", palletNumber: \"P001\" },\n        { slotNumber: \"1-1-2\", status: \"empty\", productName: \"产品A\", palletNumber: \"P001\" },\n        { slotNumber: \"1-2-1\", status: \"occupied\", productName: \"产品A\", palletNumber: \"P001\" },\n        { slotNumber: \"1-2-2\", status: \"occupied\", productName: \"产品A\", palletNumber: \"P001\" },\n        { slotNumber: \"1-2-3\", status: \"unavailable\" }\n    ]\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7b07200b2acd7d8d",
+        "type": "http response",
+        "z": "afdaa1d48efa9822",
+        "name": "返回数据",
+        "statusCode": "",
+        "headers": {},
+        "x": 680,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "a7be76fb7b441859",
+        "type": "http in",
+        "z": "afdaa1d48efa9822",
+        "name": "获取仓库数据",
+        "url": "/api/warehouse/e1",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 290,
+        "y": 780,
+        "wires": [
+            [
+                "dc18a78e4be4c407"
+            ]
+        ]
+    },
+    {
+        "id": "dc18a78e4be4c407",
+        "type": "function",
+        "z": "afdaa1d48efa9822",
+        "name": "function 7",
+        "func": "// 生成随机库位数据\nfunction generateRandomSlots() {\n    const slots = [];\n    const numSlots = Math.floor(Math.random() * 50) + 1; // 随机1-50条\n\n    // 预定义参数\n    const products = [\"产品A\", \"产品B\", \"产品C\", \"产品D\"];\n    const statusOptions = [\"occupied\", \"empty\", \"unavailable\"];\n\n    // 生成唯一库位坐标\n    const generated = new Set();\n\n    for (let i = 0; i < numSlots; i++) {\n        // 生成唯一坐标\n        let row, col, slotKey;\n        do {\n            row = Math.floor(Math.random() * 12) + 1;  // 1-12行\n            col = Math.floor(Math.random() * 18) + 1;  // 1-18列\n            slotKey = `${row}-${col}`;\n        } while (generated.has(slotKey));\n        generated.add(slotKey);\n\n        // 生成库位信息\n        const status = statusOptions[Math.floor(Math.random() * 3)];\n        const slot = {\n            slotNumber: `1-${row}-${col}`,\n            status: status,\n            productName: \"无\",\n            palletNumber: \"无\"\n        };\n\n        // 处理不同状态\n        if (status === \"occupied\") {\n            slot.productName = products[Math.floor(Math.random() * products.length)];\n            slot.palletNumber = \"P\" + Math.floor(Math.random() * 1000).toString().padStart(3, \"0\");\n        } else if (status === \"empty\" && Math.random() < 0.3) { // 30%概率保留信息\n            slot.productName = products[Math.floor(Math.random() * products.length)];\n            slot.palletNumber = \"P\" + Math.floor(Math.random() * 1000).toString().padStart(3, \"0\");\n        }\n\n        slots.push(slot);\n    }\n    return slots;\n}\n\nmsg.payload = {\n    vehicles: [\n        { id: 1, row: 3, col: 2, type: 1, battery: 85, task: '无', start: '无', end: '1-1-11' },\n        { id: 2, row: 6, col: 5, type: 0, battery: 50, task: '零食 220005', start: 'C2', end: '1-1-10' },\n    ],\n    slots: generateRandomSlots()\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 840,
+        "wires": [
+            [
+                "7b07200b2acd7d8d"
+            ]
+        ]
+    }
+]

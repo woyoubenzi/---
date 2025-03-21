@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>仓库可视化</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+        #title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        #controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+        }
+        button {
+            padding: 8px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background: #007BFF;
+            color: white;
+            margin: 5px;
+        }
+        button:hover {
+            background: #357dc646;
+        }
+        #warehouseChart {
+            width: 90%;
+            height: 90vw; /* 调整高度为宽度的90% */
+            max-height: 850px; /* 最大高度 */
+            margin: auto;
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        .icon-button {
+            position: relative;
+            padding: 8px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            margin: 5px;
+        }
+        .icon-button img {
+            width: 24px;
+            height: 24px;
+        }
+        .icon-button .tooltip {
+            visibility: hidden;
+            width: 80px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -40px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .icon-button .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+        .icon-button:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 100px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content button {
+            color: black;
+            padding: 8px 15px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            background: #007BFF;
+            color: white;
+            border: none;
+            width: 90%;
+        }
+        .dropdown-content button:hover {
+            background-color: #357dc646;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-header {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .modal-body {
+            margin-top: 20px;
+        }
+        .modal-body .icon-description {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .modal-body .icon-description img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+        .green-dot {
+            width: 24px;
+            height: 24px;
+            background-color: #00FF00;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .yellow-dot {
+            width: 24px;
+            height: 24px;
+            background-color: #FFA500;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .red-dot {
+            width: 24px;
+            height: 24px;
+            background-color: #FF0000;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .black-dot {
+            width: 24px;
+            height: 24px;
+            background-color: #000000;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .white-dot {
+            width: 24px;
+            height: 24px;
+            background-color: #FFF;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .green-dotnumber {
+            width: 24px;
+            height: 24px;
+            background-color: #00FF00;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+            position: relative;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            line-height: 24px;
+        }
+        .modal-body p {
+            margin-bottom: 20px;
+            text-indent: 2em;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="title">一层</div>
+    <div id="controls">
+        <div class="dropdown">
+            <button class="icon-button">
+                <img src="./image/lou.png" alt="楼层选择">
+                <span class="tooltip">选择库层</span>
+            </button>
+            <div class="dropdown-content">
+                <button>一层</button>
+                <button>二层</button>
+                <button>三层</button>
+            </div>
+        </div>
+        <button id="refreshBtn" class="icon-button">
+            <img src="./image/shuaxin.png" alt="刷新数据">
+            <span class="tooltip">刷新数据</span>
+        </button>
+        <button id="toggleDisplay" class="icon-button">
+            <img src="./image/qiehuan.png" alt="切换显示">
+            <span class="tooltip">切换显示</span>
+        </button>
+        <button class="icon-button" id="infoBtn">
+            <img src="./image/q.png" alt="说明">
+            <span class="tooltip">说明</span>
+        </button>
+    </div>
+    <div id="warehouseChart"></div>
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-header">说明</div>
+            <div class="modal-body">
+                <p>
+                    界面会自动刷新，鼠标移动到库位/小车时会显示详细数据。
+                </p>
+                <div class="icon-description">
+                    <img src="./image/lou.png">
+                    <span>选择库层：选择不同的库层进行查看。</span>
+                </div>
+                <div class="icon-description">
+                    <img src="./image/shuaxin.png">
+                    <span>刷新数据：刷新当前显示的数据。</span>
+                </div>
+                <div class="icon-description">
+                    <img src="./image/qiehuan.png">
+                    <span>切换显示：显示库位编号或类型。</span>
+                </div>
+                <div class="icon-description">
+                    <img src="./image/vacant.png">
+                    <span>空货位：该货架没有存放货物。</span>
+                </div>
+                <div class="icon-description">
+                    <img src="./image/locked.png">
+                    <span>锁定货位：该货架不能使用。</span>
+                </div>
+                <div class="icon-description">
+                    <img src="./image/occupancy.png">
+                    <span>有货位：该货架存放有货物。</span>
+                </div>
+                <div class="icon-description">
+                    <img src="./image/passage.png">
+                    <span>小车通道：小车专用通道。</span>
+                </div>
+                <div class="icon-description">
+                    <img src="./image/charger.png">
+                    <span>充电桩：小车充电位。</span>
+                </div>
+                <div class="icon-description">
+                    <img src="./image/loading.png">
+                    <span>装卸位：小车接送货物位。</span>
+                </div>
+                <div class="icon-description">
+                    <span class="white-dot"></span>
+                    <span>大面积空白区域：小车和货位都不能通行的区域。</span>
+                </div>
+                <div class="icon-description">
+                    <span class="green-dot"></span>
+                    <span>小车：电量充裕的小车。</span>
+                </div>
+                <div class="icon-description">
+                    <span class="yellow-dot"></span>
+                    <span>小车：需要充电的小车。</span>
+                </div>
+                <div class="icon-description">
+                    <span class="red-dot"></span>
+                    <span>小车：电量不足的小车。</span>
+                </div>
+                <div class="icon-description">
+                    <span class="black-dot"></span>
+                    <span>小车：出现故障的小车。</span>
+                </div>
+                <div class="icon-description">
+                    <span class="green-dotnumber">1</span>
+                    <span>小车编号：由数字表示。黑色字体代表有任务，白色字体代表无任务。</span>
+                </div>
+                <div class="icon-description">
+                    <span>🚩</span>
+                    <span>小车终点：小车的目的地，数字代表是哪辆小车的任务。</span>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./index.js"></script>
+    <script>
+        document.getElementById('infoBtn').onclick = function() {
+            document.getElementById('infoModal').style.display = "block";
+        }
+        document.getElementsByClassName('close')[0].onclick = function() {
+            document.getElementById('infoModal').style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('infoModal')) {
+                document.getElementById('infoModal').style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
