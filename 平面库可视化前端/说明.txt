@@ -1,7 +1,8 @@
-分两种打开方式：noder-red和静态网页直接打开
+分两种打开方式：node-red和静态网页直接打开
 1：静态网页
-可以直接打开，但是构建库位需要手动填入，可以作为其他web程序的一部分
-2：node-red的方式
+可以直接打开，但是构建库位需要在index.js中手动填入，可以作为其他web程序的一部分
+2：node-red
 由node-red作为服务器构建的一个网页界面
-需要在node-red根目录设置静态文件index，将image文件(存放图标)和js文件放入
-在node-red种导入示例，网址是前端html，根目录为js，动态数据为数据源
+需要将index文件夹放在node-red根目录，设置为静态文件夹，在node-red中导入示例
+然后重启node-red。
+输入启动：http://127.0.0.1:1880/nodeui/e1
